@@ -18,9 +18,7 @@ function App() {
         <div>
           <b>{pageTitle}</b>
         </div>
-        <a target="_blank" href={url}>
-          {url}
-        </a>
+        <a href={url}>{url}</a>
       </div>
     );
   });
