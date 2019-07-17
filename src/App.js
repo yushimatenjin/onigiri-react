@@ -1,24 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+
+const fetchOnigiriSale = (
+  url = "https://asia-northeast1-onigiri-project-d4cc4.cloudfunctions.net/api"
+) =>
+  fetch(url, {
+    mode: "cors"
+  });
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
+  const [saleList, setSaleList] = useState([]);
+  const onigiriSaleList = saleList.map(sale => {
+    const { pageTitle, company, url } = sale;
+
+    return (
+      <div keys={company}>
+        <span>会社名 : {company}</span>
+        <div>
+          <b>{pageTitle}</b>
+        </div>
+        <a target="_blank" href={url}>
+          {url}
         </a>
-      </header>
+      </div>
+    );
+  });
+  return (
+    <div>
+      <span>おにぎりボタン</span>
+      <button
+        onClick={async () => {
+          try {
+            const response = await fetchOnigiriSale();
+            const onigirsale = await response.json();
+            setSaleList(onigirsale.isArray || onigirsale);
+          } catch (e) {
+            console.log(e);
+          }
+        }}
+      >
+        🍙
+      </button>
+      <button onClick={() => setSaleList([])}>🔥</button>
+      <div>{onigiriSaleList}</div>
     </div>
   );
 }
